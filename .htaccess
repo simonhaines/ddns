@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName DDNS
+AuthUserFile /home/conamalgamate/.ddns.htpasswd
+Require valid-user

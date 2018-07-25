@@ -1,0 +1,25 @@
+Dynamic DNS using the DreamHost API
+
+To use the DreamHost DNS API to manage DDNS:
+  1. Check out this repository somewhere publicly accessible and
+     update index.cgi with the path to a Racket executable:
+	 #!/path/to/racket
+  2. Get an API key for 'All DNS functions' from DreamHost:
+     https://panel.dreamhost.com/index.cgi?tree=home.api
+	 and copy the key to ~/.ddns.api-key at DreamHost.
+  3. Create a .htpasswd file for the dynamic host:
+     htpasswd -c ~/.ddns.htpasswd home.example.com
+  4. Update the .htaccess file in this directory to reference
+     the AuthUserFile in the home directory:
+	 AuthUserFile /home/myusername/.ddns.htpasswd
+  5. On the dynamic host, create a cron job to call the script:
+     # Every three hours: midnight, 8am, 4pm
+     0 0,8,16 * * * curl --basic --user <host>:<passwd> \
+	   https://home.example.com/ddns/ >/var/log/ddns.log
+	 
+The password is sent in the clear so ensure TLS. The DNS TTL is
+up to 4 hours so there is no point setting a cron interval less
+than this.
+
+References:
+  https://github.com/ianloic/dreamhost-ddns
